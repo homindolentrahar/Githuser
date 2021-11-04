@@ -4,8 +4,10 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
+import androidx.core.content.ContextCompat
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -21,9 +23,11 @@ import dagger.hilt.android.AndroidEntryPoint
 @ExperimentalCoilApi
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+    @ExperimentalMaterialApi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
+            this.window.statusBarColor = ContextCompat.getColor(this, R.color.black)
             GithuserTheme {
                 Surface(color = MaterialTheme.colors.background) {
                     val navController = rememberNavController()

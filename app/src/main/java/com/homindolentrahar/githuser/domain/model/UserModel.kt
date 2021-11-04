@@ -7,4 +7,15 @@ data class UserModel(
     val username: String,
     val htmlUrl: String,
     val type: String,
-)
+) {
+    companion object {
+        fun empty(): UserModel = UserModel(
+            0,
+            "",
+            "",
+            "",
+            "",
+            "",
+        )
+    }
+}

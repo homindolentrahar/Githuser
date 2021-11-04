@@ -1,5 +1,6 @@
 package com.homindolentrahar.githuser.di
 
+import androidx.paging.PagingConfig
 import com.homindolentrahar.githuser.data.remote.UserApiService
 import com.homindolentrahar.githuser.data.repository.UserRepositoryImpl
 import com.homindolentrahar.githuser.domain.repository.UserRepository
@@ -14,10 +15,18 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object AppModule {
+    @Provides
+    @Singleton
+    fun providePagingConfig(): PagingConfig = PagingConfig(
+        enablePlaceholders = true,
+        initialLoadSize = 40,
+        pageSize = 20,
+        maxSize = 200,
+    )
 
     @Provides
     @Singleton
     fun provideUsersRepository(
-        apiService: UserApiService
+        apiService: UserApiService,
     ): UserRepository = UserRepositoryImpl(apiService)
 }

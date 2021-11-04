@@ -32,6 +32,11 @@ val Typography = Typography(
         fontWeight = FontWeight.SemiBold,
         fontSize = 16.sp
     ),
+    h4 = TextStyle(
+        fontFamily = SFProText,
+        fontWeight = FontWeight.SemiBold,
+        fontSize = 14.sp
+    ),
     body1 = TextStyle(
         fontFamily = SFProText,
         fontWeight = FontWeight.Normal,

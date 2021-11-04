@@ -1,10 +1,13 @@
 package com.homindolentrahar.githuser.presentation.user_detail.screens
 
-import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.Image
+import android.content.Intent
+import android.net.Uri
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.CornerSize
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
@@ -13,9 +16,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -23,6 +29,7 @@ import androidx.navigation.NavController
 import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
 import com.homindolentrahar.githuser.presentation.user_detail.UserDetailViewModel
+import com.homindolentrahar.githuser.ui.theme.White
 
 @ExperimentalFoundationApi
 @ExperimentalCoilApi
@@ -164,8 +171,31 @@ fun UserDetailScreen(
                             style = TextStyle(
                                 color = Color.LightGray,
                                 fontSize = 12.sp,
-                            )
+                            ),
+                            maxLines = 3,
+                            overflow = TextOverflow.Ellipsis,
                         )
+                        Spacer(modifier = Modifier.height(16.dp))
+
+                        val context = LocalContext.current
+                        val githubIntent = Intent(Intent.ACTION_VIEW, Uri.parse(detail.htmlUrl))
+                        OutlinedButton(
+                            modifier = Modifier
+                                .fillMaxWidth(),
+                            contentPadding = PaddingValues(16.dp),
+                            border = BorderStroke(1.5.dp, Color.LightGray),
+                            shape = RoundedCornerShape(
+                                corner = CornerSize(8.dp),
+                            ),
+                            onClick = { context.startActivity(githubIntent) }
+                        ) {
+                            Text(
+                                text = "Github Page",
+                                style = MaterialTheme.typography.h4.copy(
+                                    color = White,
+                                ),
+                            )
+                        }
                     }
                 }
             }

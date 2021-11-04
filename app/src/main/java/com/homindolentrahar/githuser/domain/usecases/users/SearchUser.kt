@@ -1,30 +1,27 @@
 package com.homindolentrahar.githuser.domain.usecases.users
 
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
 import com.homindolentrahar.githuser.domain.model.UserModel
 import com.homindolentrahar.githuser.domain.repository.UserRepository
 import com.homindolentrahar.githuser.common.Resource
+import com.homindolentrahar.githuser.data.remote.SearchUserPagingSource
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
-class SearchUser @Inject constructor (
-    private val repository: UserRepository
+class SearchUser @Inject constructor(
+    private val repository: UserRepository,
+    private val pagingConfig: PagingConfig
 ) {
-    suspend operator fun invoke(
+    operator fun invoke(
         query: String,
         sort: String,
-        count: Int,
-        page: Int
-    ): Flow<Resource<List<UserModel>>> = flow {
-        emit(Resource.Loading())
+        order: String,
+    ): Flow<PagingData<UserModel>> {
+        val pagingSource = SearchUserPagingSource(repository, query, sort, order)
+        val pager = Pager(pagingConfig) { pagingSource }
 
-        emit(
-            repository.searchUser(
-                query,
-                sort,
-                count,
-                page
-            )
-        )
+        return pager.flow
     }
 }

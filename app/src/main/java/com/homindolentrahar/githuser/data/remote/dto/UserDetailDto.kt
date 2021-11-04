@@ -22,7 +22,7 @@ data class UserDetailDto(
     val id: Int,
     val location: String?,
     val login: String,
-    val name: String,
+    val name: String?,
     @SerializedName("node_id")
     val nodeId: String,
     @SerializedName("public_gists")
@@ -74,7 +74,7 @@ data class UserDetailDto(
         id,
         location ?: "No Location",
         login,
-        name,
+        name ?: "No Name",
         nodeId,
         publicGists,
         publicRepos,

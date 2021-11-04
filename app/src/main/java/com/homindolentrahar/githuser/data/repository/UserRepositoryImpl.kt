@@ -1,21 +1,19 @@
 package com.homindolentrahar.githuser.data.repository
 
-import com.homindolentrahar.githuser.data.remote.UserApiService
 import com.homindolentrahar.githuser.domain.model.UserDetailModel
 import com.homindolentrahar.githuser.domain.model.UserModel
 import com.homindolentrahar.githuser.domain.repository.UserRepository
 import com.homindolentrahar.githuser.common.Resource
-import javax.inject.Inject
+import com.homindolentrahar.githuser.data.remote.UserApiService
 
-class UserRepositoryImpl @Inject constructor(
-    private val apiService: UserApiService
+class UserRepositoryImpl(
+    private val apiService: UserApiService,
 ) : UserRepository {
-    override suspend fun getUsers(): Resource<List<UserModel>> {
+    override suspend fun getUsers(since: Int, count: Int): List<UserModel> {
         return try {
-            val result = apiService.getUsers().map { user -> user.toModel() }
-            Resource.Success(result)
+            apiService.getUsers(since = since, count = count).map { dto -> dto.toModel() }
         } catch (err: Exception) {
-            Resource.Error(message = err.message.toString())
+            throw err
         }
     }
 
@@ -28,31 +26,39 @@ class UserRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getFollowers(username: String): Resource<List<UserModel>> {
+    override suspend fun getFollowers(
+        username: String,
+        count: Int,
+        page: Int,
+    ): List<UserModel> {
         return try {
-            val result = apiService.getFollowers(username = username).map { item -> item.toModel() }
-            Resource.Success(result)
+            apiService.getFollowers(
+                username = username,
+                count = count,
+                page = page,
+            ).map { dto -> dto.toModel() }
         } catch (err: Exception) {
-            Resource.Error(message = err.message.toString())
+            throw err
         }
     }
 
     override suspend fun searchUser(
         query: String,
         sort: String,
+        order: String,
         count: Int,
         page: Int
-    ): Resource<List<UserModel>> {
+    ): List<UserModel> {
         return try {
-            val result = apiService.searchUser(
+            apiService.searchUser(
                 query = query,
                 sort = sort,
+                order = order,
                 count = count,
-                page = page,
-            ).items.map { item -> item.toModel() }
-            Resource.Success(result)
+                page = page
+            ).items.map { dto -> dto.toModel() }
         } catch (err: Exception) {
-            Resource.Error(message = err.message.toString())
+            throw err
         }
     }
 }
