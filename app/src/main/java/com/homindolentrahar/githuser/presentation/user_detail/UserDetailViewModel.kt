@@ -5,12 +5,16 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.paging.PagingData
 import com.homindolentrahar.githuser.common.Constants
 import com.homindolentrahar.githuser.domain.model.UserDetailModel
 import com.homindolentrahar.githuser.domain.usecases.users.UsersUsecases
 import com.homindolentrahar.githuser.common.Resource
+import com.homindolentrahar.githuser.domain.model.RepoModel
+import com.homindolentrahar.githuser.domain.model.UserModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
@@ -23,6 +27,21 @@ class UserDetailViewModel @Inject constructor(
 
     private val _state = mutableStateOf(UserDetailState())
     val state: State<UserDetailState> = _state
+
+    val userFollowers: Flow<PagingData<UserModel>> =
+        (savedStateHandle.get<String>(Constants.PARAM_USERNAME) ?: "").let { username ->
+            usersUsecases.getFollowers(username)
+        }
+    val userFollowings: Flow<PagingData<UserModel>> =
+        (savedStateHandle.get<String>(Constants.PARAM_USERNAME) ?: "").let { username ->
+            usersUsecases.getFollowings(username)
+        }
+
+    val userRepos: Flow<PagingData<RepoModel>> =
+        (savedStateHandle.get<String>(Constants.PARAM_USERNAME) ?: "").let { username ->
+            usersUsecases.getUserRepos(username)
+        }
+
 
     private var getSingleUserJob: Job? = null
 

@@ -1,6 +1,7 @@
 package com.homindolentrahar.githuser.data.remote
 
 import com.homindolentrahar.githuser.BuildConfig
+import com.homindolentrahar.githuser.data.remote.dto.RepoDto
 import com.homindolentrahar.githuser.data.remote.dto.UserDetailDto
 import com.homindolentrahar.githuser.data.remote.dto.SearchUserResponse
 import com.homindolentrahar.githuser.data.remote.dto.UserDto
@@ -30,6 +31,15 @@ interface UserApiService {
         @Query("page") page: Int,
     ): List<UserDto>
 
+    @GET("/users/{username}/following")
+    suspend fun getFollowings(
+        @Header("Authorization") authorizationToken: String = BuildConfig.GITHUB_API_TOKEN,
+        @Header("Accept") accept: String = "application/vnd.github.v3+json",
+        @Path("username") username: String,
+        @Query("per_page") count: Int,
+        @Query("page") page: Int,
+    ): List<UserDto>
+
     @GET("/search/users")
     suspend fun searchUser(
         @Header("Authorization") authorizationToken: String = BuildConfig.GITHUB_API_TOKEN,
@@ -40,4 +50,15 @@ interface UserApiService {
         @Query("per_page") count: Int,
         @Query("page") page: Int,
     ): SearchUserResponse
+
+    @GET("/users/{username}/repos")
+    suspend fun getUserRepos(
+        @Header("Authorization") authorizationToken: String = BuildConfig.GITHUB_API_TOKEN,
+        @Header("Accept") accept: String = "application/vnd.github.v3+json",
+        @Path("username") username: String,
+        @Query("sort") sort: String,
+        @Query("direction") direction: String,
+        @Query("per_page") count: Int,
+        @Query("page") page: Int,
+    ): List<RepoDto>
 }

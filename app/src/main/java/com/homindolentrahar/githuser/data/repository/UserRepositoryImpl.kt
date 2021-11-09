@@ -5,6 +5,7 @@ import com.homindolentrahar.githuser.domain.model.UserModel
 import com.homindolentrahar.githuser.domain.repository.UserRepository
 import com.homindolentrahar.githuser.common.Resource
 import com.homindolentrahar.githuser.data.remote.UserApiService
+import com.homindolentrahar.githuser.domain.model.RepoModel
 
 class UserRepositoryImpl(
     private val apiService: UserApiService,
@@ -29,13 +30,29 @@ class UserRepositoryImpl(
     override suspend fun getFollowers(
         username: String,
         count: Int,
-        page: Int,
+        page: Int
     ): List<UserModel> {
         return try {
             apiService.getFollowers(
                 username = username,
                 count = count,
                 page = page,
+            ).map { dto -> dto.toModel() }
+        } catch (err: Exception) {
+            throw err
+        }
+    }
+
+    override suspend fun getFollowings(
+        username: String,
+        count: Int,
+        page: Int
+    ): List<UserModel> {
+        return try {
+            apiService.getFollowings(
+                username = username,
+                count = count,
+                page = page
             ).map { dto -> dto.toModel() }
         } catch (err: Exception) {
             throw err
@@ -57,6 +74,26 @@ class UserRepositoryImpl(
                 count = count,
                 page = page
             ).items.map { dto -> dto.toModel() }
+        } catch (err: Exception) {
+            throw err
+        }
+    }
+
+    override suspend fun getUserRepos(
+        username: String,
+        sort: String,
+        direction: String,
+        count: Int,
+        page: Int
+    ): List<RepoModel> {
+        return try {
+            apiService.getUserRepos(
+                username = username,
+                sort = sort,
+                direction = direction,
+                count = count,
+                page = page
+            ).map { dto -> dto.toModel() }
         } catch (err: Exception) {
             throw err
         }

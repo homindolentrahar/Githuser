@@ -5,6 +5,10 @@ import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -25,6 +29,7 @@ import com.homindolentrahar.githuser.presentation.Screens
 import com.homindolentrahar.githuser.presentation.core.components.Appbar
 import com.homindolentrahar.githuser.presentation.users.UsersViewModel
 import com.homindolentrahar.githuser.presentation.users.components.UserListItem
+import com.homindolentrahar.githuser.ui.theme.White
 
 @ExperimentalMaterialApi
 @ExperimentalCoilApi
@@ -33,12 +38,38 @@ fun UsersScreen(
     navController: NavController,
     viewModel: UsersViewModel = hiltViewModel()
 ) {
-//    val state = viewModel.state.value
     val users = viewModel.users.collectAsLazyPagingItems()
 
     Scaffold(
         topBar = {
-            Appbar()
+            Appbar(
+                title = {
+                    Image(
+                        painter = painterResource(id = R.drawable.ic_github),
+                        contentDescription = "Logo",
+                    )
+                },
+                actions = {
+                    IconButton(
+                        onClick = { }
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Search,
+                            contentDescription = "Search User",
+                            tint = Color.LightGray
+                        )
+                    }
+                    IconButton(
+                        onClick = { }
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.MoreVert,
+                            contentDescription = "More Options",
+                            tint = White,
+                        )
+                    }
+                }
+            )
         },
     ) {
         LazyColumn(
